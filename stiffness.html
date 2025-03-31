@@ -1,0 +1,374 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN"
+ "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<!-- Header -->
+
+<head>
+
+  <title>Romain Michalec - Stiffness</title>
+
+  <meta name="author" content="Romain Michalec" />
+  <meta name="date"   content="2012-03-10" />
+
+  <meta http-equiv="content-type"     content="text/html;charset=UTF-8" />
+  <meta http-equiv="content-language" content="en-us" />
+
+  <link rel="stylesheet" type="text/css" href="left.css" />
+  <link rel="alternate stylesheet" type="text/css"
+        title="Boxed (debug)" href="boxed.css" />
+
+</head>
+
+<body>
+
+<!-- Navigation -->
+
+<ul id="nav">
+
+  <li class="firstblock"><a href="index.html">Home</a></li>
+  <li><a href="control.html">Control</a></li>
+  <li><a href="disturbances.html">Disturbances</a></li>
+  <li><a href="stiffness.html">Stiffness</a></li>
+  <li><a href="publications.html">Publications</a></li>
+  <li class="lastblock"><a href="about.html">About Me</a></li>
+
+</ul>
+
+<!-- Content -->
+
+<div id="content">
+
+  <h1 class="firstblock">Stiffness</h1>
+
+  <p>In the <a href="disturbances.html">section about disturbances</a>, we approach the problem of grasp robustness through the research of tightening forces. Interestingly enough, in our hands, tightening is linked to stiffness. Indeed, when we squeeze an object, our fingers not only apply larger contact forces, they also become tenser, more rigid: their stiffness increases. In other words, tightening causes stiffness. The opposite is not true: we can make our fingers stiff without larger contact forces, or even without having an object in grasp. To do so, we contract simultaneously the flexor and extensor muscles of the fingers (located mostly in the forearm).</p>
+
+  <p>In both cases, whether it comes with tightening or not, finger stiffness has an effect on the dynamic behavior of the object, that is to say on the way it moves in response to forces. This is easy to feel: when we make our fingers stiff, the object in grasp becomes less easy to move with the other hand. By adjusting the intensity of tightening or muscle co-contraction, we produce grasps that are more or less compliant, that is to say the object is more or less easy to move with the other hand (compliance is the inverse of stiffness).</p>
+
+  <p>This capability, controlling the object's dynamic behavior through finger stiffness, is worth trying to replicate in a robot hand. It is a sort of stiffness control, except that in classical stiffness control, contact forces rather than finger stiffnesses are used to produce the desired dynamic behavior of the object, namely an elastic behavior around some position of reference, in translation and rotation (hence the term stiffness control).</p>
+
+  <p>In order to realize this sort of stiffness control, two things are necessary. First, we must be able to adjust the stiffness of the fingers. This is possible and based on the concept of <em>active stiffness</em>, as explained below. Second, we must know the relationship between the stiffness of the fingers and the dynamic behavior of the object. This relationship isn't known outside of the simplified case where the relative motion between the object and the fingertips is negligible. We found it in the case where rolling at the contact points is non-negligible.</p>
+
+  <p>The first thing to know about stiffness in a robot hand is that it is independant from tightening: unlike our fingers, robotic fingers can squeeze an object harder without becoming stiffer. To make them stiffer, we can use motor control as follows: if the fingers are tendon-driven, co-actuating the flexor and extensor tendons emulates muscle co-contraction; and if the fingers are torque-driven, adjusting the servo gains changes joint stiffness. For instance, let say for simplicity's sake that each joint is torque-controlled by a trivial proportional regulator, <i>τ</i> = <i>k</i> <span style="white-space:nowrap;">(<i>q</i><sup>[<i>d</i>]</sup> − <i>q</i>)</span>. The servo gain <i>k</i> represents the stiffness of the joint around the desired articular position <i>q</i><sup>[<i>d</i>]</sup>. So stiffness control of the object through finger stiffness, is choosing the servo gains in order to achieve a desired stiffness of the object around some desired position.</p>
+
+  <p>More precisely, in a robot hand, each finger has a certain stiffness, characteristic of its elastic behavior. This stiffness is termed <em>passive</em> when it results from the hand's construction and <em>active</em> when it comes from motor control.</p>
+
+  <dl>
+    <dt>Passive stiffness</dt>
+    <dd>Passive stiffness results from mechanical reasons, such as actuator compliance, elasticity in the transmission chain, fingertip materials, or the use of return springs. It also stems from structural properties such as couplings between joints or between fingers, through underactuation for instance. It can't be easily modified, at least not when the hand is in operation.</dd>
+    <dt>Active stiffness</dt>
+    <dd>Active stiffness can be changed more easily. As explained above, it results from motor control. To adjust it, we need to make sure that the control algorithms in the hand's embedded electronics can specify arbitrarily the servo gains they use (or the intensity of tendon co-actuation).</dd>
+  </dl>
+
+  <p><img style="float:right;margin-left:15px;" width="180" height="218" src="joint-stiffness-180x218.png" title="Joint stiffness in a robotic finger" alt="[Schematic drawing of a finger, with annotation of the stiffness coefficients of its joints]" />The stiffness of each robotic finger can be described by a particular matrix, whose diagonal terms are the principal stiffness coefficients of the joints, and off-diagonal terms are stiffness couplings between the joints. For instance, for a finger with three joints and no couplings:</p>
+
+  <div>
+    <table border="0" cellspacing="0" cellpadding="0" style="margin-left:auto;margin-right:auto;">
+      <colgroup>
+        <col /><col /><col /><col />
+      </colgroup>
+      <tr>
+        <td>
+          <i class="red">k</i>&nbsp;=&nbsp;
+        </td>
+        <td style="line-height:100%">
+          ⎛<br />
+          ⎜<br />
+          ⎜<br />
+          ⎝
+        </td>
+        <td>
+          <table border="0" cellspacing="0" cellpadding="0" style="text-align:center;">
+            <colgroup>
+              <col width="25" /><col width="25" /><col width="25" />
+            </colgroup>
+            <tr>
+              <td><i class="red">k<sub>1</sub></i></td><td>0</td><td>0</td>
+            </tr>
+            <tr>
+              <td>0</td><td><i class="red">k<sub>2</sub></i></td><td>0</td>
+            </tr>
+            <tr>
+              <td>0</td><td>0</td><td><i class="red">k<sub>3</sub></i></td>
+            </tr>
+          </table>
+        </td>
+        <td style="line-height:100%">
+          ⎞<br />
+          ⎟<br />
+          ⎟<br />
+          ⎠
+        </td>
+      </tr>
+    </table>
+  </div>
+
+  <p>This matrix is called the <em>joint stiffness matrix</em> of the finger. It is symmetric definite-positive and maps infinitesimal variations in joint position to infinitesimal variations in joint torque (this is actually its definition): <i>dτ</i> = <span style="white-space:nowrap;">− <span class="red"><i>k</i></span> <i>dq</i></span>.</p>
+
+  <p>Finger stiffness can also be described in the cartesian space at distal phalanx level, rather than in the joint space. The matrix used for that is called the <em>cartesian stiffness matrix</em> of the finger, and it represents the elastic behavior of a generalized spring, working in translation and rotation in the cartesian space at phalanx level, as illustrated below.</p>
+
+  <div>
+    <table border="0" cellspacing="0" cellpadding="0" style="margin-left:auto;margin-right:auto;">
+      <colgroup>
+        <col /><col /><col />
+      </colgroup>
+      <tr>
+        <td>
+          <img width="180" height="218" src="joint-stiffness-180x218.png" title="Joint stiffness" alt="[Schematic drawing of a finger, with annotation of the stiffness coefficients of its joints]" />
+        </td>
+        <td style="vertical-align:middle;font-size:130%;">
+          &ensp;⇒&ensp;
+        </td>
+        <td>
+          <img width="217" height="218" src="cartesian-stiffness-217x218.png" title="Cartesian stiffness" alt="[Schematic drawing of a finger, with its cartesian stiffness represented by a spring attached to the distal phalanx]" />
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <table border="0" cellspacing="0" cellpadding="0" style="margin-left:auto;">
+            <colgroup>
+              <col /><col /><col /><col />
+            </colgroup>
+            <tr>
+              <td>
+                <i class="red">k</i>&nbsp;=&nbsp;
+              </td>
+              <td style="line-height:100%">
+                ⎛<br />
+                ⎜<br />
+                ⎜<br />
+                ⎝
+              </td>
+              <td>
+                <table border="0" cellspacing="0" cellpadding="0" style="text-align:center;">
+                  <colgroup>
+                    <col width="25" /><col width="25" /><col width="25" />
+                  </colgroup>
+                  <tr>
+                    <td><i class="red">k<sub>1</sub></i></td><td>0</td><td>0</td>
+                  </tr>
+                  <tr>
+                    <td>0</td><td><i class="red">k<sub>2</sub></i></td><td>0</td>
+                  </tr>
+                  <tr>
+                    <td>0</td><td>0</td><td><i class="red">k<sub>3</sub></i></td>
+                  </tr>
+                </table>
+              </td>
+              <td style="line-height:100%">
+                ⎞<br />
+                ⎟<br />
+                ⎟<br />
+                ⎠
+              </td>
+            </tr>
+          </table>
+        </td>
+        <td></td>
+        <td>
+          <table border="0" cellspacing="0" cellpadding="0" style="margin-left:auto;">
+            <colgroup>
+              <col /><col /><col /><col />
+            </colgroup>
+            <tr>
+              <td>
+                <i class="red">K</i>&nbsp;=&nbsp;
+              </td>
+              <td style="line-height:100%">
+                ⎛<br />
+                ⎜<br />
+                ⎝
+              </td>
+              <td>
+                <table border="0" cellspacing="0" cellpadding="0" style="text-align:center;">
+                  <colgroup>
+                    <col width="35" /><col width="35" />
+                  </colgroup>
+                  <tr>
+                    <td><i class="red">K<sub>tr</sub></i></td><td><i>K<sub>cpl</sub></i></td>
+                  </tr>
+                  <tr>
+                    <td><i>K<sub>cpl</sub></i></td><td><i class="red">K<sub>rot</sub></i></td>
+                  </tr>
+                </table>
+              </td>
+              <td style="line-height:100%">
+                ⎞<br />
+                ⎟<br />
+                ⎠
+              </td>
+            </tr>
+            <tr>
+              <td></td>
+              <td colspan="3" style="white-space:nowrap;text-align:center;">
+                3&thinsp;×&thinsp;3 blocks
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+  </div>
+
+  <p>The blocks <span class="red"><i>K<sub>tr</sub></i></span> and <span class="red"><i>K<sub>rot</sub></i></span> are the linear and angular stiffness matrices of the generalized spring, and the two <i>K<sub>cpl</sub></i> are possible couplings between these directions (not necessarily the same despite the notation). The whole matrix maps infinitesimal variations in the linear and angular position of the distal phalanx (<i>dX</i>) to infinitesimal variations in the force and moment that the distal phalanx applies in response to the change of position (restoring force,&nbsp;<span class="teal"><i>dF</i></span>):</p>
+
+  <div>
+    <table border="0" cellspacing="0" cellpadding="0" style="margin-left:auto;margin-right:auto;">
+      <colgroup>
+        <col />
+        <col width="50" />
+        <col /><col/><col /><col />
+        <col /><col/><col /><col />
+      </colgroup>
+      <tr>
+        <td>
+          <span class="teal"><i>dF</i></span> = − <span class="red"><i>K</i></span> <i>dX</i>
+        </td>
+        <td></td>
+        <td>
+          with <span class="teal"><i>dF</i></span>&nbsp;=&nbsp;
+        </td>
+        <td style="line-height:100%">
+          ⎛<br />
+          ⎜<br />
+          ⎝
+        </td>
+        <td style="text-align:center;">
+          <i>df</i><br />
+          <i>dm</i>
+        </td>
+        <td style="line-height:100%">
+          ⎞<br />
+          ⎟<br />
+          ⎠
+        </td>
+        <td>
+          &ensp;and <i>dX</i>&nbsp;=&nbsp;
+        </td>
+        <td style="line-height:100%">
+          ⎛<br />
+          ⎜<br />
+          ⎝
+        </td>
+        <td style="text-align:center;">
+          <i>dx</i><br />
+          <i>dθ</i>
+        </td>
+        <td style="line-height:100%">
+          ⎞<br />
+          ⎟<br />
+          ⎠
+        </td>
+      </tr>
+    </table>
+  </div>
+
+  <p>all quantities being written in a frame attached to the distal phalanx. The relationship between the joint and cartesian stiffness matrices is known since the early 2000s as follows:</p>
+
+  <p class="eqn"><span class="red"><i>k</i></span> = <i>J<sup>T</sup></i> <span class="red"><i>K</i></span> <i>J</i> + <i>k</i>′&emsp;&emsp;with <i>k</i>′ = <i>f</i>&nbsp;(<i>dJ</i>, <span class="teal"><i>F</i></span>)</p>
+
+  <p><i>J</i> is the jacobian matrix of the finger of course, so this relationship is more than a standard change-of-frame formula between joint coordinates and cartesian coordinates (<span class="red"><i>k</i></span> ≠ <span style="white-space:nowrap;"><i>J<sup>T</sup></i> <span class="red"><i>K</i></span> <i>J</i></span>). The additional term <i>k</i>′ depends on the change in finger geometry which comes with the variation in distal phalanx position (differential of the jacobian matrix&nbsp;<i>dJ</i>), and on the loading of the finger (contact force&nbsp;<span class="teal"><i>F</i></span>).</p>
+
+  <p>Now, when an object is grasped by several fingers, the stiffnesses of the fingers induce an elastic dynamic behavior of the object, that is to say a total resulting stiffness at object level, in the cartesian space, as illustrated below.</p>
+
+  <div class="figure">
+    <img style="vertical-align:middle;" width="210" height="224" src="object-stiffness-1-210x224.png" title="Cartesian finger stiffness" alt="[Schematic drawing of a hand grasping an object, with the cartesian stiffness of each finger represented by a spring attached to the distal phalanx]" /><span style="font-size:130%;">&ensp;⇒&ensp;</span><img style="vertical-align:middle;" width="210" height="224" src="object-stiffness-2-210x224.png" title="Cartesian object stiffness" alt="[Schematic drawing of a hand grasping an object, with the cartesian stiffness of the object represented by a spring attached to it]" />
+    <div class="caption">
+      Cartesian finger stiffness and cartesian object stiffness
+    </div>
+  </div>
+
+  <p>This object stiffness can be described by a cartesian stiffness matrix <span class="blue"><i>K<sub>obj</sub></i></span> of the same form as the cartesian stiffness matrices of the fingers <span class="red"><i>K<sub>1</sub></i>, …, <i>K<sub>n</sub></i></span> (with <i>n</i> the number of fingers); that is to say, two <span style="white-space:nowrap;">3&thinsp;×&thinsp;3</span> blocks for linear and angular stiffnesses and two <span style="white-space:nowrap;">3&thinsp;×&thinsp;3</span> blocks for couplings. This matrix also represents the dynamic behavior of a generalized spring:</p>
+
+  <div>
+    <table border="0" cellspacing="0" cellpadding="0" style="margin-left:auto;margin-right:auto;">
+      <colgroup>
+        <col />
+        <col width="25" />
+        <col /><col/><col /><col />
+        <col /><col/><col /><col />
+      </colgroup>
+      <tr>
+        <td>
+          <i>dF<sub>obj</sub></i> = − <span class="blue"><i>K<sub>obj</sub></i></span> <i>dX<sub>obj</sub></i>
+        </td>
+        <td></td>
+        <td>
+          with <i>dF<sub>obj</sub></i>&nbsp;=&nbsp;
+        </td>
+        <td style="line-height:100%">
+          ⎛<br />
+          ⎜<br />
+          ⎝
+        </td>
+        <td style="text-align:center;">
+          <i>df<sub>obj</sub></i><br />
+          <i>dm<sub>obj</sub></i>
+        </td>
+        <td style="line-height:100%">
+          ⎞<br />
+          ⎟<br />
+          ⎠
+        </td>
+        <td>
+          &ensp;and <i>dX<sub>obj</sub></i>&nbsp;=&nbsp;
+        </td>
+        <td style="line-height:100%">
+          ⎛<br />
+          ⎜<br />
+          ⎝
+        </td>
+        <td style="text-align:center;">
+          <i>dx<sub>obj</sub></i><br />
+          <i>dθ<sub>obj</sub></i>
+        </td>
+        <td style="line-height:100%">
+          ⎞<br />
+          ⎟<br />
+          ⎠
+        </td>
+      </tr>
+    </table>
+  </div>
+
+  <p><i>dX<sub>obj</sub></i> represents an infinitesimal variation of the linear and angular position of the object, <i>dF<sub>obj</sub></i> an infinitesimal variation of the total contact force and total contact moment, and all quantities are written in a frame attached to the object. As for the relationship between finger stiffnesses <span class="red"><i>K<sub>1</sub></i>, …, <i>K<sub>n</sub></i></span> and object stiffness <span class="blue"><i>K<sub>obj</sub></i></span>, it is known only when there is no relative motion between the object and the fingertips, or when this motion is negligible. In this simplified case, the object stiffness is just the sum of the finger stiffnesses:</p>
+
+  <p class="eqn"><span class="blue"><i>K<sub>obj</sub></i></span>&ensp;=&ensp;<span style="font-size:115%;">Σ</span>&thinsp;<sub><i>i</i>&thinsp;=&thinsp;1,…,<i>n</i></sub>&ensp;(<i><sup>obj</sup>Ad<sub>&thinsp;i</sub></i>)<i><sup>−T</sup></i>&ensp;<span class="red"><i>K<sub>i</sub></i></span>&ensp;<i><sup>i</sup>Ad<sub>&thinsp;obj</sub></i></p>
+
+  <p>where <i><sup>i</sup>Ad<sub>&thinsp;obj</sub></i> and (<i><sup>obj</sup>Ad<sub>&thinsp;i</sub></i>)<i><sup>−T</sup></i> are appropriate change-of-frame matrices (transport matrices), since <span class="blue"><i>K<sub>obj</sub></i></span> is written in object coordinates and <span class="red"><i>K<sub>i</sub></i></span> in distal phalanx coordinates.</p>
+
+  <p>An example of manipulation where the assumption of no relative motion at the contact interface is valid is cooperative manipulation of a payload by several serial manipulators. In this case, the contacts between the payload and each manipulator's end effector are often fixtures.</p>
+
+  <p><img style="float:right;margin-left:15px;" width="230" height="227" src="stiffness-relationship-230x227.png" title="Contributions to object stiffness" alt="[Schematic drawing of a hand grasping a finger, with representations of finger and object stiffnesses, contact forces, and curvature forms]" />But in humanoid robot hands, fingertips are generally not fixed on the object. There is some amount of relative motion. In particular, if the fingertips are round, they are bound to roll on the surface of the object. When this happens, the simple formula written above is incomplete. We proved that in the case of non-sliding contacts that can freely roll (on the tangent plane) and twist (around the contact normal), the relationship between <span class="blue"><i>K<sub>obj</sub></i></span> and <span class="red"><i>K<sub>1</sub></i>, …, <i>K<sub>n</sub></i></span> includes terms that are function of the contact forces <span class="teal"><i>F<sub>1</sub></i>, …, <i>F<sub>n</sub></i></span> and of the curvature forms <span class="green">Γ<i><sub>1</sub></i>, …, Γ<i><sub>n</sub></i>, Γ<i><sub>obj</sub></i></span> of the surfaces in contact. The general form of this relationship is:</p>
+
+  <p class="eqn" style="white-space:normal;"><span class="blue"><i>K<sub>obj</sub></i></span>&ensp;=&ensp;<span style="white-space:nowrap;"><span style="font-size:115%;">Σ</span>&thinsp;<sub><i>i</i>&thinsp;=&thinsp;1,…,<i>n</i></sub></span>&ensp;<span style="white-space:nowrap;">[&thinsp;(<i>A</i>(<span class="red"><i>K<sub>i</sub></i></span>)</span> + <span style="white-space:nowrap;"><i>B</i>(<span class="teal"><i>F<sub>i</sub></i></span>))</span> <span style="white-space:nowrap;"><i>M</i>(<span class="green">Γ<i><sub>obj</sub></i></span>, <span class="green">Γ<i><sub>i</sub></i></span>, <span class="teal"><i>F<sub>i</sub></i></span>, <span class="red"><i>K<sub>i</sub></i></span>)</span> − <span style="white-space:nowrap;"><i>B</i>(<span class="teal"><i>F<sub>i</sub></i></span>)&thinsp;]</span></p>
+
+  <p>with <i>A</i>(<span class="red"><i>K<sub>i</sub></i></span>), <i>B</i>(<span class="teal"><i>F<sub>i</sub></i></span>), and <span style="white-space:nowrap;"><i>M</i>(<span class="green">Γ<i><sub>obj</sub></i></span>, <span class="green">Γ<i><sub>i</sub></i></span>, <span class="teal"><i>F<sub>i</sub></i></span>, <span class="red"><i>K<sub>i</sub></i></span>)</span> matrices that are (non-linear) functions of whatever is indicated between the brackets. The proof of this result is quite long and made difficult by rolling at the contacts.</p>
+
+  <p>Deriving this relationship is only the first step towards stiffness control of the object through finger stiffness, though. Indeed, we get the object stiffness <span class="blue"><i>K<sub>obj</sub></i></span> as a function of the finger cartesian stiffnesses <span class="red"><i>K<sub>1</sub></i>, …, <i>K<sub>n</sub></i></span>, not joint stiffnesses <span class="red"><i>k<sub>1</sub></i>, …, <i>k<sub>n</sub></i></span>. Yet for control purposes, it would be better to have this second relationship. But it is more difficult to get, because of inversion issues: the relationship between joint and cartesian stiffnesses expresses <span class="red"><i>k<sub>i</sub></i></span> as a function of <span class="red"><i>K<sub>i</sub></i></span>, while we would rather have <span class="red"><i>K<sub>i</sub></i></span> as a function of <span class="red"><i>k<sub>i</sub></i></span>; and the inversion of this relationship is not straightforward.</p>
+
+  <p class="lastblock">So the extension to joint level is left to further research, as well as the stiffness control itself: how to set the joint stiffnesses <span class="red"><i>k<sub>i</sub></i></span> to get a desired object stiffness <span class="blue"><i>K<sub>obj</sub></i><sup>[<i>d</i>]</sup></span>.</p>
+
+</div>
+
+<!-- Copyright and Contact -->
+
+<div id="copyright">
+
+  <hr />
+
+  <p class="firstblock lastblock" style="text-align:left;">
+    <span style="white-space:nowrap;">Copyright ©&nbsp;2012 Romain Michalec.</span>
+    <span style="white-space:nowrap;">Text licensed under <a href="http://creativecommons.org/licenses/by-nc-nd/3.0">CC&nbsp;BY-NC-ND&nbsp;3.0</a> or ulterior.</span>
+    <span style="white-space:nowrap;">Images released into the <a href="http://creativecommons.org/publicdomain/zero/1.0">public&nbsp;domain</a>.</span><br />
+    <span style="white-space:nowrap;">Valid <a href="http://validator.w3.org/check?uri=referer">XHTML&nbsp;1.1</a> and <a href="http://jigsaw.w3.org/css-validator/check/referer?profile=css3">CSS&nbsp;3</a>.</span>
+    <span style="white-space:nowrap;">Last update: 2012-03-10.</span>
+    <span style="white-space:nowrap;">Contact: firstname.lastname@ensta.org.</span></p>
+
+</div>
+
+</body>
+</html>

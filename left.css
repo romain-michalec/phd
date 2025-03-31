@@ -1,0 +1,301 @@
+@charset "UTF-8";
+
+@import url("webfont-lmsans.css");
+@import url("webfont-freesans.css");
+@import url("webfont-freeserif.css");
+@import url("webfont-dejavusans.css");
+@import url("webfont-dejavuserif.css");
+
+/* Font families */
+
+body {
+  font-family: "Latin Modern Sans", "Latin Modern Sans Webfont",
+    /* Whole Latin script, with diacritics and general punctuation. */
+    /* Includes in particular:                                      */
+    /* U+0308 COMBINING DIAERESIS (double derivative)               */
+    "FreeSans", "FreeSans Webfont",
+    /* Adds many Unicode blocks, in particular Greek script and many mathematical operators. */
+    /* Includes in particular:                                                               */
+    /* U+2002 EN SPACE (&ensp;)                                                              */
+    /* U+2003 EM SPACE (&emsp;)                                                              */
+    /* U+2009 THIN SPACE (&thinsp;)                                                          */
+    /* U+239B LEFT PARENTHESIS UPPER HOOK to U+23A0 RIGHT PARENTHESIS LOWER HOOK             */
+    /* These characters are not in "Latin Modern Sans".                                      */
+    "DejaVu Sans", "DejaVu Sans Webfont",
+    /* Like FreeSans, adds many Unicode blocks.                            */
+    /* Includes in particular:                                             */
+    /* U+211D DOUBLE-STRUCK CAPITAL R (set of real numbers)                */
+    /* U+22EE VERTICAL ELLIPSIS (used for matrix row elision)              */
+    /* These characters are neither in "Latin Modern Sans" nor "FreeSans". */
+    "FreeSerif", "FreeSerif Webfont",
+    "DejaVu Serif", "DejaVu Serif Webfont",
+    /* The serif versions of FreeFont and DejaVu contain more glyphs than the sans-serif versions. */
+    /* In particular, they include:                                                                */
+    /* U+1D6FF MATHEMATICAL ITALIC SMALL DELTA                                                     */
+    /* This character is neither in "Latin Modern Sans", "FreeSans" nor "DejaVu Sans".             */
+    "Nimbus Sans L", "Helvetica", "Liberation Sans", "Arial",
+    /* If none of "Latin Modern Sans", "FreeSans/FreeSerif", "DejaVu Sans/DejaVu Serif" is installed */
+    /* or can be downloaded (webfont version), default to Helvetica-like or Arial-like fonts.        */
+    sans-serif;
+    /* And if no Helvetica-like or Arial-like font is present, use browser default sans-serif font.    */
+    /* If there remains unrendered glyphs at this stage (ex. U+1D6FF MATHEMATICAL ITALIC SMALL DELTA), */
+    /* user agents seem to go through all installed fonts alphabetically until they find an available  */
+    /* glyph.                                                                                          */
+}
+
+/* General CSS */
+
+body {
+  /* center rather than stretch */
+  min-width: 780px; width: auto; max-width: 980px;
+  margin-left: auto; margin-right: auto;
+  /* other margin settings (outside and inside margins) */
+  margin-top: 0px; margin-bottom: 0px;
+  border: none; padding: 15px;
+  /* text settings */
+  background-color: white; color: black;
+  text-align: left; text-indent: 0px;
+}
+
+body {
+  font-size: medium;
+  font-stretch: normal; font-variant: normal;
+  font-style: normal;   font-weight: normal; 
+}
+
+em, i     { font-style: oblique; } /* default: italic */
+strong, b { font-weight: bold; }
+
+.sc { font-variant: small-caps; }
+
+img { margin: 0px; border: none; padding: 0px; }
+
+a { text-decoration: underline; }
+a:link    { background-color: transparent; color: black; }
+a:visited { background-color: transparent; color: gray; }
+a:hover   { background-color: transparent; color: gray; }
+a:focus   { background-color: transparent; color: gray; }
+a:active  { background-color: gray;        color: white; }
+
+/* Navigation */
+
+ul#nav {
+  margin: 0px; border: 1px dashed silver; padding: 15px;
+  width: 200px;
+  float: left;
+  list-style-type: none;
+  font-size: 90%; font-weight: bold;
+}
+
+ul#nav li {
+  margin-top: 1em; margin-bottom: 1em;
+  margin-left: 0px; margin-right: 0px;
+  border: none; padding: 0px;
+}
+
+ul#nav ul {
+  /* if the navigation menu has sublists (not recommended) */
+  margin: 0px; border: none; padding: 0px; padding-left: 15px;
+  list-style-type: none;
+}
+
+ul#nav ul li {
+  /* if the navigation menu has sublists (not recommended) */
+  margin-top: 1em; margin-bottom: 0px;
+  margin-left: 0px; margin-right: 0px;
+  border: none; padding: 0em;
+}
+
+ul#nav .firstblock { margin-top: 0px; }    /* inhibit vertical margins of */
+ul#nav .lastblock  { margin-bottom: 0px; } /* first and last menu items   */
+
+ul#nav a { text-decoration: underline; padding: 0.25em; display: block; }
+ul#nav a:link    { background-color: #E0E0E0; color: black; }
+ul#nav a:visited { background-color: #E0E0E0; color: gray;  }
+ul#nav a:hover   { background-color: white;   color: black; }
+ul#nav a:focus   { background-color: white;   color: black; }
+ul#nav a:active  { background-color: gray;    color: white; }
+
+/* Content section */
+
+/* The width of this section is comprised between 503px and 683px */
+
+div#content {
+  margin: 0px; border: 1px dashed silver; padding: 15px;
+  /* left margin at {width + paddings} of navigation menu + 15px separation */
+  margin-left: 245px; width: auto;
+}
+
+div#content h1 {
+  font-size: 115%; font-weight: bold;
+}
+
+div#content h2 {
+  font-size: 100%; font-weight: bold;
+}
+
+div#content p, div#content ul, div#content ol, div#content dl {
+  font-size: 100%; font-weight: normal;
+  text-align: justify;
+}
+
+div#content p.eqn {
+  /* for a short equation, centered on one line */
+  text-align: center; white-space: nowrap;
+}
+
+div#content p.eqns {
+  /* for a multiline equation; use with width:<something> */
+  margin-left: auto; margin-right: auto;
+  white-space: nowrap; overflow: visible;
+}
+
+div#content .firstblock { margin-top: 0px; }    /* inhibit vertical margins */
+div#content .lastblock  { margin-bottom: 0px; } /* of first and last blocks */
+
+div#content .black  { color: black; }
+div#content .gray   { color: gray; }
+div#content .silver { color: silver; }
+div#content .white  { color: white; }
+
+div#content .red     { color: red; }
+div#content .green   { color: lime; }
+div#content .yellow  { color: yellow; }
+div#content .blue    { color: blue; }
+div#content .magenta { color: fuchsia; }
+div#content .cyan    { color: aqua; }
+
+div#content .teal { color: teal; }
+
+div#content div.figure {
+  /* use with width:<something> */
+  /* if no width specified, width of parent environment used ie */
+  /* margin-left and margin-right will default to 0px           */
+  margin-left: auto; margin-right: auto;
+  text-align: center;
+}
+
+div#content div.figure div.caption {
+  /* use with width:<something smaller than width of div.figure> */
+  /* if no width specified, width of div.figure will be used i.e */
+  /* margin-left and margin-right will default to 0px            */
+  margin-left: auto; margin-right: auto;
+}
+
+div#content div.figure + div.figure {
+  margin-top: 15px;
+}
+
+div#content div.figure > div.column {
+  float: left;
+  text-align: center;
+}
+
+div#content div.figure > div.resetonecolumn {
+  clear: both;
+}
+
+/* Copyright and contact section */
+
+div#copyright {
+  margin: 0px; border: none; padding: 0px;
+  /* 15px separation from the content section */
+  margin-top: 15px;
+  /* cancels the "float: left;" of the navigation section */
+  /* (useful only if the content section is shorter than the navigation one) */
+  clear: left;
+}
+
+div#copyright p {
+  font-size: 80%; font-weight: normal;
+  text-align: justify;
+}
+
+div#copyright .firstblock { margin-top: 0px; }    /* inhibit vertical margins */
+div#copyright .lastblock  { margin-bottom: 0px; } /* of first and last blocks */
+
+/* Gray Levels
+/*
+/* #000000 =   0,  0,  0 = black  = gris à 0%    de blanc
+/* #101010 =  16, 16, 16 =        = gris à 1/16  de blanc
+/* #202020 =  32, 32, 32 =        = gris à 1/8   de blanc
+/* #404040 =  64, 64, 64 =        = gris à 25%   de blanc = 50% gray, 50% black
+/* #808080 = 128,128,128 = gray   = gris à 50%   de blanc
+/* #C0C0C0 = 192,192,192 = silver = gris à 75%   de blanc = 50% gray, 50% white
+/* #E0E0E0 = 224,224,224 =        = gris à 7/8   de blanc
+/* #F0F0F0 = 240,240,240 =        = gris à 15/16 de blanc
+/* #FFFFFF = 255,255,255 = white  = gris à 100%  de blanc                    */
+
+/* LaTeX-Beamer CambridgeUS Color Theme
+/*
+/* default text:
+/* bg = ffffff = blanc
+/* fg = 000000 = noir
+/*
+/* navigation bar:
+/* bg = d9d9d9 = r85% v85% b85% = gris à 85% de blanc
+/* fg = aa6c6c = r67% v42% b42% = rouge terne grisé (passif)
+/* fg = 7a0000 = r48% v00% b00% = rouge très sombre (actif)
+/*
+/* bar between navigation bar and title bar:
+/* bg = e6e6e6 = r90% v90% b90% = gris 90% de blanc
+/* fg = 8f0000 = r56% v00% b00% = rouge sombre bordeaux
+/*
+/* title bar:
+/* bg = f3f3f3 = r95% v95% b95% = gris 95% de blanc
+/* fg = cc0000 = r80% v00% b00% = rouge vif vermillon
+/*
+/* titre on title page:
+/* bg = ffffff = blanc
+/* fg = cc0000 = rouge vif vermillon
+/*
+/* block title (blue):
+/* bg = ffffff = blanc
+/* fg = 3333b3 = r20% v20% b70%
+/*
+/* alerted text (red) :
+/* bg = ffffff = blanc
+/* fg = bb1919 = r74% v10% b10% = rouge moins vif que celui du titre         */
+
+/* Styles
+/*
+/* media="screen"
+/*   Visually impaired
+/*   Menu list (grey)
+/*   Menu list (red)
+/*   Menu bar (grey)
+/*   Menu bar (red)
+/*   Boxed (debug)
+/*
+/* media="print"
+/*   Printable version
+/*
+/* media="handheld"
+/*   Mobile version                                                          */
+
+/* Identifiers and classes
+/*
+/* Identifier attributes (id="...") are used to identify a unique element on
+/* the page (a menu, a paragraph, a section...). Class attributes (class="...")
+/* are used to identify a set of elements.                                   */
+
+/* Webfont formats, from older to newer
+
+True Type (TTF)
+Supported by FF 3.5+, Chrome 4+, Safari 4+, IE 9, Opera 10.5+, Android, iOS.
+
+Open Type (OTF)
+Supported by FF 3.5+, Chrome 4+, Safari 4+, IE 9, Opera 10.5+.
+
+Embedded OpenType (EOT)
+Supported by IE 5-9.
+Microsoft proprietary font format.
+Actually, IE 5-8 support ONLY EOT webfonts. IE 9 also accepts TTF, OTF, WOFF.
+
+Web Open Font (WOFF)
+Supported by FF 3.6+, Chrome 5+, IE 9, probably Safari and Opera too.
+Modern web-only font format that uses gzip compression.
+
+Scalabe Vector Graphics (SVG)
+Supported by Chrome, Safari, Opera, iOS.
+This is an XML format required by iOS devices before version 4.2.            */

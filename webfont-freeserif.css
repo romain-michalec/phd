@@ -1,0 +1,49 @@
+@charset "UTF-8";
+
+@font-face {
+  font-family: "FreeSerif Webfont";
+  src: url("fonts/freeserif/freeserif-regular-webfont.eot");
+  src: url("fonts/freeserif/freeserif-regular-webfont.eot?#iefix") format("embedded-opentype"),
+       url("fonts/freeserif/freeserif-regular-webfont.otf") format("opentype"),
+       url("fonts/freeserif/freeserif-regular-webfont.woff") format("woff"),
+       url("fonts/freeserif/freeserif-regular-webfont.ttf") format("truetype"),
+       url("fonts/freeserif/freeserif-regular-webfont.svg#FreeSerifMedium") format("svg");
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "FreeSerif Webfont";
+  src: url("fonts/freeserif/freeserif-italic-webfont.eot");
+  src: url("fonts/freeserif/freeserif-italic-webfont.eot?#iefix") format("embedded-opentype"),
+       url("fonts/freeserif/freeserif-italic-webfont.otf") format("opentype"),
+       url("fonts/freeserif/freeserif-italic-webfont.woff") format("woff"),
+       url("fonts/freeserif/freeserif-italic-webfont.ttf") format("truetype"),
+       url("fonts/freeserif/freeserif-italic-webfont.svg#FreeSerifItalic") format("svg");
+  font-weight: normal;
+  font-style: italic;
+}
+
+@font-face {
+  font-family: "FreeSerif Webfont";
+  src: url("fonts/freeserif/freeserif-bold-webfont.eot");
+  src: url("fonts/freeserif/freeserif-bold-webfont.eot?#iefix") format("embedded-opentype"),
+       url("fonts/freeserif/freeserif-bold-webfont.otf") format("opentype"),
+       url("fonts/freeserif/freeserif-bold-webfont.woff") format("woff"),
+       url("fonts/freeserif/freeserif-bold-webfont.ttf") format("truetype"),
+       url("fonts/freeserif/freeserif-bold-webfont.svg#FreeSerifBold") format("svg");
+  font-weight: bold;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "FreeSerif Webfont";
+  src: url("fonts/freeserif/freeserif-bolditalic-webfont.eot");
+  src: url("fonts/freeserif/freeserif-bolditalic-webfont.eot?#iefix") format("embedded-opentype"),
+       url("fonts/freeserif/freeserif-bolditalic-webfont.otf") format("opentype"),
+       url("fonts/freeserif/freeserif-bolditalic-webfont.woff") format("woff"),
+       url("fonts/freeserif/freeserif-bolditalic-webfont.ttf") format("truetype"),
+       url("fonts/freeserif/freeserif-bolditalic-webfont.svg#FreeSerifBoldItalic") format("svg");
+  font-weight: bold;
+  font-style: italic;
+}

@@ -1,0 +1,29 @@
+@charset "UTF-8";
+
+/* This stylesheet boxes headings, paragraphs and images to make
+   the CSS box model more visible and layout debug easier. Around
+   any content, there is:
+   -- padding: an inner margin (between content and border)
+   -- border:  a border
+   -- margin:  an outer margin (between the blocks)
+   To be used in addition to left.css. */
+
+body {
+  border: 1px solid gray;
+}
+
+ul#nav, div#content, div#copyright, div#content div {
+  border: 1px solid silver;
+}
+
+h1, h2, p, ul#nav ul, div#content ul, div#content ol, div#content dl {
+  border: 1px solid blue;
+}
+
+ul#nav li, ul#nav ul li, div#content li, div#content dt, div#content dd {
+  border: 1px solid lime;
+}
+
+img, table, hr {
+  border: 1px solid red;
+}

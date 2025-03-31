@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN"
+ "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<!-- Header -->
+
+<head>
+
+  <title>Romain Michalec - Control</title>
+
+  <meta name="author" content="Romain Michalec" />
+  <meta name="date"   content="2012-03-10" />
+
+  <meta http-equiv="content-type"     content="text/html;charset=UTF-8" />
+  <meta http-equiv="content-language" content="en-us" />
+
+  <link rel="stylesheet" type="text/css" href="left.css" />
+  <link rel="alternate stylesheet" type="text/css"
+        title="Boxed (debug)" href="boxed.css" />
+
+</head>
+
+<body>
+
+<!-- Navigation -->
+
+<ul id="nav">
+
+  <li class="firstblock"><a href="index.html">Home</a></li>
+  <li><a href="control.html">Control</a></li>
+  <li><a href="disturbances.html">Disturbances</a></li>
+  <li><a href="stiffness.html">Stiffness</a></li>
+  <li><a href="publications.html">Publications</a></li>
+  <li class="lastblock"><a href="about.html">About Me</a></li>
+
+</ul>
+
+<!-- Content -->
+
+<div id="content">
+
+  <h1 class="firstblock">Control</h1>
+
+  <p><img style="float:right;margin-left:15px;" width="260" height="306" src="computed-torque-control-260x306.png" title="Object motion is achieved by contact forces produced by adequate joint torques" alt="[Drawing of an object grasped by two fingers]" />Most control schemes of multifingered dextrous manipulation work along these lines:</p>
+
+  <ol>
+    <li>First they compute the force and moment that would move the object as desired.</li>
+    <li>Then they compute contact forces whose resultant is this force and this moment.</li>
+    <li>Finally they compute motor torques that make the fingers apply these contact forces.</li>
+  </ol>
+
+  <p>In short: desired motion → desired <span class="green"><i>F<sub>total</sub></i></span> → desired <span class="red"><i>F<sub>contact</sub></i></span> → control torques&nbsp;<span class="blue"><i>τ</i></span>.</p>
+
+  <p>The first and last steps above are relatively simple: they just require using the equations of motion of the object and the dynamic model of the robot hand. The second step is more interesting. It requires solving for <span class="red"><i>F<sub>contact</sub></i></span> in the following matrix equation:</p>
+
+  <p class="eqn"><i>G</i> <span class="red"><i>F<sub>contact</sub></i></span> = <span class="green"><i>F<sub>total</sub></i></span></p>
+
+  <p>where <span class="red"><i>F<sub>contact</sub></i></span> is the column vector of the contact forces <span class="red"><span style="white-space:nowrap;"><i>F<sub>contact&thinsp;<sub>1</sub></sub></i></span>, …, <span style="white-space:nowrap;"><i>F<sub>contact&thinsp;<sub>n</sub></sub></i></span></span>, <span class="green"><i>F<sub>total</sub></i></span> is the desired resultant wrench (a force and a moment), and <i>G</i> is a particular matrix called the grasp matrix (which sums the contact forces into the resultant wrench, as the equation says). Of course, the general solution of this equation is the sum of a particular solution and the homogeneous solution:</p>
+
+  <p class="eqn"><span class="red"><i>F<sub>contact</sub></i></span> = <i>G</i><sup>+</sup> <span class="green"><i>F<sub>total</sub></i></span> + <span style="white-space:nowrap;">ker&thinsp;<i>G</i></span></p>
+
+  <p>where <i>G</i><sup>+</sup> is the pseudo-inverse of the grasp matrix and <span style="white-space:nowrap;">ker&thinsp;<i>G</i></span> is its nullspace (kernel). This decomposition of the contact forces can be found in most approaches of manipulation control. The two components of the decomposition are sets of forces called, respectively, the <em>pseudo-inverse solution</em> and the <em>internal forces</em>.</p>
+
+  <ol>
+
+    <li>The pseudo-inverse solution is a particular solution of the equation, so its resultant is <span class="green"><i>F<sub>total</sub></i></span>, so it produces the desired object motion.</li>
+
+    <li>The internal forces are in the nullspace of the grasp matrix, so their resultant is null, so they don't produce any object motion.</li>
+
+  </ol>
+
+  <p>It is important to note that neither the pseudo-inverse solution nor the internal forces are necessarily contact forces: they might be out of the contact cones. But their sum must be contact forces, because robotic fingers can't apply forces that aren't consistent with physical reality. Hence the importance of internal forces: control schemes use them to correct the pseudo-inverse solution back into the contact cones, if necessary.</p>
+
+  <div class="figure" style="width:502px;">
+    <img width="500" height="282" src="contact-forces-with-and-without-internal-forces-500x282.png" title="The pseudo-inverse solution might be outside the contact cones: adding adequate internal forces turns it into forces inside the contact cones" alt="[Drawing of contact forces with and without internal forces (inside and outside the contact cones)]" />
+    <div class="column" style="width:249px;">Without internal forces<br /><span class="red"><i>F<sub>contact</sub></i></span> = <i>G</i><sup>+</sup>&nbsp;<span class="green"><i>F<sub>total</sub></i></span></div>
+    <div class="column" style="width:249px;">With adequate internal forces<br /><span class="red"><i>F<sub>contact</sub></i></span> = <i>G</i><sup>+</sup>&nbsp;<span class="green"><i>F<sub>total</sub></i></span> + <i>F<sub>int</sub></i></div>
+    <div class="resetonecolumn"></div>
+  </div>
+
+  <p>More generally, control schemes use internal forces to take into account other constraints and control objectives than the physical consistency of the contact forces. Among them, for instance, non-sliding of the contacts, tightening of the object, and motor limits in the fingers.</p>
+
+  <p>The problem is that this approach cannot account for the fact that some of these constraints and control objectives are actually more important than the motion of the object. Indeed, since internal forces are in the nullspace of the grasp matrix, they affect the contact forces without changing their resultant. Therefore the motion of the object remains the same whatever the choice of internal forces. In other words, the motion of the object is <em>hierarchically higher</em> than all the constraints and control objectives taken into account with internal forces. Yet it shouldn't be: although it makes sense that object motion be a high-priority objective in manipulation control, motor limits and physical consistency of the contact forces should be of higher priority.</p>
+
+  <p>To avoid this problem, we propose a control scheme where the contact forces are not broken into a pseudo-inverse solution and internal forces, and where the various constraints and objectives are put in a better priority order. This new control scheme is based on mathematical programming (constrained optimization), a convenient way of sorting things in order of priority:</p>
+
+  <ol>
+
+    <li>The constraints and control objectives that must be met no matter what, such as the physical consistency of the contact forces, are used to form the <em>constraints</em> of an optimization process.</li>
+
+    <li>The control objectives that should be met as much as possible, such as the motion of the object, form the <em>optimization criteria</em> used in the <em>cost function</em>.</li>
+
+  </ol>
+
+  <p>More precisely, here is our choice of constraints and criteria:</p>
+
+  <dl>
+    <dt>Constraints</dt>
+    <dd>Hand dynamics, friction constraints (contact cones), motor limits, joint limits. They are all linear (or can be linearized) in the following unknowns: the control torques&nbsp;<span class="blue"><i>τ</i></span>, the joint accelerations&nbsp;<span class="magenta"><i>q̈</i></span>, and the contact forces <span class="red"><i>F<sub>contact</sub></i></span>.</dd>
+    <dt>Criteria</dt>
+    <dd>Object motion, object tightening (see the <a href="disturbances.html">section about disturbances</a> for more about tightening), non-sliding of contacts, minimality of motor torques, coupling between the joint positions of the last two phalanges of each finger. They are all quadratic in the same unknowns. Each criteria is given a weight representing its priority; then they are all combined into a quadratic cost function.</dd>
+  </dl>
+
+  <p>Taken together, the constraints and the cost function form a constrained quadratic programming problem&nbsp;(QP):</p>
+
+  <p class="eqns" style="width:10em;">
+    min&thinsp;<sub><i>y</i></sub>&ensp;½ <i>y<sup>T</sup> Q y</i> + <i>y<sup>T</sup> r</i><br />
+    <i>A<sub>eq</sub> y</i> + <i>b<sub>eq</sub></i> = 0<br />
+    <i>A<sub>neq</sub> y</i> + <i>b<sub>neq</sub></i> ≤ 0
+  </p>
+
+  <p class="lastblock">with <i>y</i> being the column vector of the unknowns <span class="blue"><i>τ</i></span>, <span class="magenta"><i>q̈</i></span>, <span class="red"><i>F<sub>contact</sub></i></span>. Solving this optimization problem at each time step of the robot hand's control loop provides us with the control torques&nbsp;<span class="blue"><i>τ</i></span>.</p>
+
+</div>
+
+<!-- Copyright and Contact -->
+
+<div id="copyright">
+
+  <hr />
+
+  <p class="firstblock lastblock" style="text-align:left;">
+    <span style="white-space:nowrap;">Copyright ©&nbsp;2012 Romain Michalec.</span>
+    <span style="white-space:nowrap;">Text licensed under <a href="http://creativecommons.org/licenses/by-nc-nd/3.0">CC&nbsp;BY-NC-ND&nbsp;3.0</a> or ulterior.</span>
+    <span style="white-space:nowrap;">Images released into the <a href="http://creativecommons.org/publicdomain/zero/1.0">public&nbsp;domain</a>.</span><br />
+    <span style="white-space:nowrap;">Valid <a href="http://validator.w3.org/check?uri=referer">XHTML&nbsp;1.1</a> and <a href="http://jigsaw.w3.org/css-validator/check/referer?profile=css3">CSS&nbsp;3</a>.</span>
+    <span style="white-space:nowrap;">Last update: 2012-03-10.</span>
+    <span style="white-space:nowrap;">Contact: firstname.lastname@ensta.org.</span></p>
+
+</div>
+
+</body>
+</html>

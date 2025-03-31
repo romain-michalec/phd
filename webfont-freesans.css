@@ -1,0 +1,49 @@
+@charset "UTF-8";
+
+@font-face {
+  font-family: "FreeSans Webfont";
+  src: url("fonts/freesans/freesans-regular-webfont.eot");
+  src: url("fonts/freesans/freesans-regular-webfont.eot?#iefix") format("embedded-opentype"),
+       url("fonts/freesans/freesans-regular-webfont.otf") format("opentype"),
+       url("fonts/freesans/freesans-regular-webfont.woff") format("woff"),
+       url("fonts/freesans/freesans-regular-webfont.ttf") format("truetype"),
+       url("fonts/freesans/freesans-regular-webfont.svg#FreeSansMedium") format("svg");
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "FreeSans Webfont";
+  src: url("fonts/freesans/freesans-oblique-webfont.eot");
+  src: url("fonts/freesans/freesans-oblique-webfont.eot?#iefix") format("embedded-opentype"),
+       url("fonts/freesans/freesans-oblique-webfont.otf") format("opentype"),
+       url("fonts/freesans/freesans-oblique-webfont.woff") format("woff"),
+       url("fonts/freesans/freesans-oblique-webfont.ttf") format("truetype"),
+       url("fonts/freesans/freesans-oblique-webfont.svg#FreeSansOblique") format("svg");
+  font-weight: normal;
+  font-style: oblique;
+}
+
+@font-face {
+  font-family: "FreeSans Webfont";
+  src: url("fonts/freesans/freesans-bold-webfont.eot");
+  src: url("fonts/freesans/freesans-bold-webfont.eot?#iefix") format("embedded-opentype"),
+       url("fonts/freesans/freesans-bold-webfont.otf") format("opentype"),
+       url("fonts/freesans/freesans-bold-webfont.woff") format("woff"),
+       url("fonts/freesans/freesans-bold-webfont.ttf") format("truetype"),
+       url("fonts/freesans/freesans-bold-webfont.svg#FreeSansBold") format("svg");
+  font-weight: bold;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "FreeSans Webfont";
+  src: url("fonts/freesans/freesans-boldoblique-webfont.eot");
+  src: url("fonts/freesans/freesans-boldoblique-webfont.eot?#iefix") format("embedded-opentype"),
+       url("fonts/freesans/freesans-boldoblique-webfont.otf") format("opentype"),
+       url("fonts/freesans/freesans-boldoblique-webfont.woff") format("woff"),
+       url("fonts/freesans/freesans-boldoblique-webfont.ttf") format("truetype"),
+       url("fonts/freesans/freesans-boldoblique-webfont.svg#FreeSansBoldOblique") format("svg");
+  font-weight: bold;
+  font-style: oblique;
+}

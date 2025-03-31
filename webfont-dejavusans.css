@@ -1,0 +1,45 @@
+@charset "UTF-8";
+
+@font-face {
+  font-family: "DejaVu Sans Webfont";
+  src: url("fonts/dejavusans/dejavusans-regular-webfont.eot");
+  src: url("fonts/dejavusans/dejavusans-regular-webfont.eot?#iefix") format("embedded-opentype"),
+       url("fonts/dejavusans/dejavusans-regular-webfont.woff") format("woff"),
+       url("fonts/dejavusans/dejavusans-regular-webfont.ttf") format("truetype"),
+       url("fonts/dejavusans/dejavusans-regular-webfont.svg#DejaVuSansBook") format("svg");
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "DejaVu Sans Webfont";
+  src: url("fonts/dejavusans/dejavusans-oblique-webfont.eot");
+  src: url("fonts/dejavusans/dejavusans-oblique-webfont.eot?#iefix") format("embedded-opentype"),
+       url("fonts/dejavusans/dejavusans-oblique-webfont.woff") format("woff"),
+       url("fonts/dejavusans/dejavusans-oblique-webfont.ttf") format("truetype"),
+       url("fonts/dejavusans/dejavusans-oblique-webfont.svg#DejaVuSansOblique") format("svg");
+  font-weight: normal;
+  font-style: oblique;
+}
+
+@font-face {
+  font-family: "DejaVu Sans Webfont";
+  src: url("fonts/dejavusans/dejavusans-bold-webfont.eot");
+  src: url("fonts/dejavusans/dejavusans-bold-webfont.eot?#iefix") format("embedded-opentype"),
+       url("fonts/dejavusans/dejavusans-bold-webfont.woff") format("woff"),
+       url("fonts/dejavusans/dejavusans-bold-webfont.ttf") format("truetype"),
+       url("fonts/dejavusans/dejavusans-bold-webfont.svg#DejaVuSansBold") format("svg");
+  font-weight: bold;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "DejaVu Sans Webfont";
+  src: url("fonts/dejavusans/dejavusans-boldoblique-webfont.eot");
+  src: url("fonts/dejavusans/dejavusans-boldoblique-webfont.eot?#iefix") format("embedded-opentype"),
+       url("fonts/dejavusans/dejavusans-boldoblique-webfont.woff") format("woff"),
+       url("fonts/dejavusans/dejavusans-boldoblique-webfont.ttf") format("truetype"),
+       url("fonts/dejavusans/dejavusans-boldoblique-webfont.svg#DejaVuSansBoldOblique") format("svg");
+  font-weight: bold;
+  font-style: oblique;
+}

@@ -1,0 +1,325 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN"
+ "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<!-- Header -->
+
+<head>
+
+  <title>Romain Michalec - Disturbances</title>
+
+  <meta name="author" content="Romain Michalec" />
+  <meta name="date"   content="2012-03-10" />
+
+  <meta http-equiv="content-type"     content="text/html;charset=UTF-8" />
+  <meta http-equiv="content-language" content="en-us" />
+
+  <link rel="stylesheet" type="text/css" href="left.css" />
+  <link rel="alternate stylesheet" type="text/css"
+        title="Boxed (debug)" href="boxed.css" />
+
+</head>
+
+<body>
+
+<!-- Navigation -->
+
+<ul id="nav">
+
+  <li class="firstblock"><a href="index.html">Home</a></li>
+  <li><a href="control.html">Control</a></li>
+  <li><a href="disturbances.html">Disturbances</a></li>
+  <li><a href="stiffness.html">Stiffness</a></li>
+  <li><a href="publications.html">Publications</a></li>
+  <li class="lastblock"><a href="about.html">About Me</a></li>
+
+</ul>
+
+<!-- Content -->
+
+<div id="content">
+
+  <h1 class="firstblock">Disturbances</h1>
+
+  <p>Contrary to industrial robots, humanoid robots are meant to be active in unstructured environments, where unforeseen and unexpected events happen frequently. Therefore, they need robustness in their manipulative abilities: keeping hold of objects in spite of disturbances is necessary.</p>
+
+  <p>It is common for human hands to provide this required robustness by squeezing the object more than necessary, in anticipation of the disturbances. Switching from a fingertip grasp to a more enveloping grasp is also possible, but the robustness brought by this change of grasp configuration comes at the expense of dexterity. So squeezing the object in a fingertip grasp seems a good way of keeping hold of it despite external disturbances, while manipulating it at the same time.</p>
+
+  <p>When trying to replicate this behavior in a robot hand, it is worth noting that we are not so much interested in the contact forces that would cancel such and such disturbance, but rather in those that the hand could apply in the absence of any disturbance, as a pre-strain. The former can be called <em>opposing forces</em> and the latter <em>tightening forces</em>, in accordance with their effects.</p>
+
+  <div class="figure" style="width:502px;">
+    <img width="500" height="311" src="baseball-opposing-500x311.jpg" title="Opposing forces cancel a given external load" alt="[Hand holding a baseball subject to external loads]" />
+    <div class="caption" style="width:430px;text-align:justify;">Opposing forces. They cancel the external load in red. Finding them for a given external load is called the <em>force optimization problem</em>. Methods to solve this problem have been proposed since the late 1980s.</div>
+  </div>
+
+  <div class="figure" style="width:502px;">
+    <img width="500" height="271" src="baseball-tightening-500x271.jpg" title="Tightening forces squeeze the object" alt="[Hand squeezing a baseball]" />
+    <div class="caption" style="width:430px;text-align:justify;">Tightening forces. Their resultant is zero, but they can be added to other forces in order to move the object, in addition to squeezing it. The grasp on the right is more robust than the grasp on the left.</div>
+  </div>
+
+  <p>Having a robot hand squeeze an object to ensure its restraint leads to the question of quantifying the required squeezing. In other words: how much tightening is needed for a certain robustness? And how do we quantify the robustness of a grasp in the first place?</p>
+
+  <p>To answer these questions, it is useful to know about the <em>grasp wrench space</em>, the set of all possible resultant wrenches produced by the fingers on the object (a wrench is a force and a moment). Indeed, a grasp can only generate certain wrenches, not the whole wrench space&nbsp;ℝ<sup>6</sup> (<span style="white-space:nowrap;"><i>se</i>&thinsp;<sub>3</sub><sup>*</sup>(ℝ)</span> to be exact), because the contact forces are constrained:</p>
+
+  <ul>
+    <li>They lie inside contact cones, because of friction laws.</li>
+    <li>Their intensity is limited, because actuator power is limited.</li>
+  </ul>
+
+  <p>In other words, the contact forces lie inside <em>bounded contact cones</em>. The grasp wrench space is then the sum of these bounded contact cones. It is a convex subset of the wrench space, containing the zero wrench, and defining how good a grasp is: the bigger the space, the more wrenches the grasp is able to produce, so the better the grasp.</p>
+
+  <p>Since a grasp can only generate certain wrenches, it can also withstand only certain wrenches: those for which it can generate the opposite wrench. That makes it possible to define the <em>space of admissible external wrenches</em> as the opposite of the grasp wrench space. The external wrenches that aren't in this space can't be resisted by the grasp, whatever the contact forces. That is to say: if applied to the object, they can't be canceled by any contact forces, so they produce a non-zero resultant wrench, and an unwanted and uncontrolled motion of the object ensues: at best, some sliding, at worst, contacts can break and the object can escape the grip.</p>
+
+  <div class="figure" style="width:502px;">
+    <div class="column" style="width:249px;">
+      <img width="240" height="140" src="gws-240x140.png" title="GWS: set of all wrenches that the grasp can generate" alt="[Drawing of the grasp wrench space as an irregular potato shape]" />
+      <div class="caption">Grasp wrench space</div>
+    </div>
+    <div class="column" style="width:249px;">
+      <img width="240" height="140" src="adws-240x140.png" title="−GWS: set of all wrenches that the grasp can cancel" alt="[Drawing of the admissible disturbance wrench space as the opposite of the grasp wrench space (an irregular potato shape too)]" />
+      <div class="caption">Admissible&nbsp;disturbance wrench&nbsp;space</div>
+    </div>
+    <div class="resetonecolumn"></div>
+    <div class="caption" style="width:330px;">Warning: these drawings are two-dimensional depictions of six-dimensional spaces.</div>
+  </div>
+
+  <div class="figure" style="width:300px;">
+    <img width="250" height="126" src="disturbances-250x126.png" title="Some disturbances are just too strong, or in the wrong direction of the wrench space" alt="[Drawing of a few disturbances as vectors pointing either inside or outside the set of admissible disturbances]" />
+    <div class="caption">Various disturbances: three are admissible, two cannot be withstood.</div>
+  </div>
+
+  <p>The boundary of the admissible disturbance wrench space is particularly important to the analysis of the grasp. Indeed, it is composed of the largest disturbances that the grasp can withstand, in every direction of the wrench space. Therefore, it defines the <em>maximal robustness</em> of the grasp.</p>
+
+  <p>Characterizing this maximal robustness means therefore describing the boundary of the admissible disturbance wrench space, something that can be difficult to do exactly. It is a lot less computationaly expensive to look for an approximation of it. We propose a method where the admissible disturbance wrench space is approximated by an inscribed polytope (see the drawings below). The approximation is coarse, but the method is fast: we get a quick quantification of the maximal robustness.</p>
+
+  <div class="figure" style="width:360px;">
+    <img width="240" height="133" src="adws-approx-step-1-240x133.png" title="How to describe the maximal robustness of a grasp without calculating the whole boundary of the admissible disturbance wrench space (step&nbsp;1)" alt="[Drawing of unit wrenches in the set of admissible disturbances]" />
+    <div class="caption" style="text-align:justify;">We choose unit wrenches in the directions of the wrench space for which we want to investigate the grasp's maximal robustness. Let <span class="red"><span style="white-space:nowrap;"><i>F<sub>dist&thinsp;<sub>1</sub></sub></i></span>, …, <span style="white-space:nowrap;"><i>F<sub>dist&thinsp;<sub>p</sub></sub></i></span></span> denote these wrenches (<span class="red"><sub>dist</sub></span> stands for disturbance).</div>
+  </div>
+
+  <div class="figure" style="width:360px;">
+    <img width="240" height="133" src="adws-approx-step-2-240x133.png" title="How to describe the maximal robustness of a grasp without calculating the whole boundary of the admissible disturbance wrench space (step&nbsp;2)" alt="[Drawing of a unit polytope in the set of admissible disturbances]" />
+    <div class="caption" style="text-align:justify;">The chosen disturbances are the vertices of a unit polytope in the wrench space.</div>
+  </div>
+
+  <div class="figure" style="width:360px;">
+    <img width="240" height="133" src="adws-approx-step-3-240x133.png" title="How to describe the maximal robustness of a grasp without calculating the whole boundary of the admissible disturbance wrench space (step&nbsp;3)" alt="[Drawing of a scaled-by-lambda unit polytope in the set of admissible disturbances]" />
+    <div class="caption" style="text-align:justify;">We can scale this polytope by any <span style="white-space:nowrap;"><span class="red"><i>λ</i></span> ≥ 0</span>. The vertices of the resulting polytope are <span class="red"><span style="white-space:nowrap;"><i>λ&thinsp;F<sub>dist&thinsp;<sub>1</sub></sub></i></span>, …, <span style="white-space:nowrap;"><i>λ&thinsp;F<sub>dist&thinsp;<sub>p</sub></sub></i></span></span>.</div>
+  </div>
+
+  <div class="figure" style="width:360px;">
+    <img width="240" height="133" src="adws-approx-step-4-240x133.png" title="How to describe the maximal robustness of a grasp without calculating the whole boundary of the admissible disturbance wrench space (step&nbsp;4)" alt="[Drawing of an inscribed polytope in the set of admissible disturbances]" />
+    <div class="caption" style="text-align:justify;">We make the polytope grow until it touches the boundary of the admissible disturbance wrench space. The resulting polytope is an approximation of the admissible disturbance wrench space. Its vertices are <span class="red"><span style="white-space:nowrap;"><i>λ<sup>max</sup>&thinsp;F<sub>dist&thinsp;<sub>1</sub></sub></i></span>, …, <span style="white-space:nowrap;"><i>λ<sup>max</sup>&thinsp;F<sub>dist&thinsp;<sub>p</sub></sub></i></span></span>. The scale factor <span class="red"><i>λ<sup>max</sup></i></span> between the unit polytope and the maximal polytope is a quantitative measure of the maximal robustness.</div>
+  </div>
+
+  <p>The difficult part is to be able to detect when the polytope touches the boundary of the admissible disturbance wrench space. It happens when one of the disturbances at the vertices of the polytope can't be canceled by the grasp any more. In other words, <span class="red"><i>λ<sup>max</sup></i></span> is the largest <span style="white-space:nowrap;"><span class="red"><i>λ</i></span> ≥ 0</span> such that each disturbance <span class="red"><span style="white-space:nowrap;"><i>λ&thinsp;F<sub>dist&thinsp;<sub>1</sub></sub></i></span>, …, <span style="white-space:nowrap;"><i>λ&thinsp;F<sub>dist&thinsp;<sub>p</sub></sub></i></span></span> is canceled by contact forces. If we let <i>n</i> denote the number of contacts, <i>f<sup>1</sup></i>, …, <i>f<sup>n</sup></i> denote contact forces, <i>f</i> denote the column vector of these contact forces, <i>C<sup>1</sup></i>, …, <i>C<sup>n</sup></i> denote the bounded contact cones, and <i>G</i> denote the grasp matrix, we have:</p>
+
+  <p class="eqn" style="white-space:normal;"><span class="red"><i>λ<sup>max</sup></i></span> = max {&nbsp;<span style="white-space:nowrap;"><span class="red"><i>λ</i></span> ≥ 0</span>&nbsp;| ∀&nbsp;<span style="white-space:nowrap;" class="red"><i>j</i> ∈ {1, …, <i>p</i>}</span>, ∃&nbsp;<span style="white-space:nowrap;">(<i>f<sub>j</sub><sup>1</sup></i>, …, <i>f<sub>j</sub><sup>n</sup></i>) ∈ <i>C<sup>1</sup></i> × … × <i>C<sup>n</sup></i></span>&nbsp;| <span style="white-space:nowrap;"><i>G</i> <i>f<sub>j</sub></i> = −&nbsp;<span class="red" style="white-space:nowrap;"><i>λ&thinsp;F<sub>dist&thinsp;<sub>j</sub></sub></i></span></span>&nbsp;}</p>
+
+  <p><i>G</i>&nbsp;<i>f<sub>j</sub></i> is the resultant of the contact forces (see the <a href="control.html">section about control</a>) so the equation <i>G</i>&nbsp;<i>f<sub>j</sub></i> = −&nbsp;<span class="red" style="white-space:nowrap;"><i>λ&thinsp;F<sub>dist&thinsp;<sub>j</sub></sub></i></span> means that the contact forces equilibrate the disturbance <span class="red" style="white-space:nowrap;"><i>λ&thinsp;F<sub>dist&thinsp;<sub>j</sub></sub></i></span>. As a matter of fact, the contact forces must also counteract gravity and produce the desired motion of the object, so two terms are missing from this equation: the weight of the object and its acceleration. We leave them out of this presentation, for the sake of simplicity.</p>
+
+  <p>It follows from the definition of <span class="red"><i>λ<sup>max</sup></i></span> that a possible method of computing it is trying to maximize <span style="white-space:nowrap;"><span class="red"><i>λ</i></span> ≥ 0</span> with respect to the unknowns (<i>f<sub>1</sub><sup>1</sup></i>, …, <i>f<sub>1</sub><sup>n</sup></i>), …, (<i>f<sub>p</sub><sup>1</sup></i>, …, <i>f<sub>p</sub><sup>n</sup></i>), <span class="red"><i>λ</i></span> and subject to the constraints:</p>
+
+  <div>
+    <table border="0" cellspacing="0" cellpadding="0" style="margin-left:auto;margin-right:auto;">
+      <colgroup>
+        <col /><col width="100" /><col />
+      </colgroup>
+      <tr>
+        <td style="white-space:nowrap;">(<i>f<sub>1</sub><sup>1</sup></i>, …, <i>f<sub>1</sub><sup>n</sup></i>) ∈ <i>C<sup>1</sup></i> × … × <i>C<sup>n</sup></i></td>
+        <td></td>
+        <td style="white-space:nowrap;"><i>G</i> <i>f<sub>1</sub></i> = −&nbsp;<span class="red" style="white-space:nowrap;"><i>λ&thinsp;F<sub>dist&thinsp;<sub>1</sub></sub></i></span></td>
+      </tr>
+      <tr>
+        <td style="text-align:center;">⋮</td>
+        <td style="text-align:center;">and</td>
+        <td style="text-align:center;">⋮</td>
+      </tr>
+      <tr>
+        <td style="white-space:nowrap;">(<i>f<sub>p</sub><sup>1</sup></i>, …, <i>f<sub>p</sub><sup>n</sup></i>) ∈ <i>C<sup>1</sup></i> × … × <i>C<sup>n</sup></i></td>
+        <td></td>
+        <td style="white-space:nowrap;"><i>G</i> <i>f<sub>p</sub></i> = −&nbsp;<span class="red" style="white-space:nowrap;"><i>λ&thinsp;F<sub>dist&thinsp;<sub>p</sub></sub></i></span></td>
+      </tr>
+    </table>
+  </div>
+
+  <p>That is to say, we must solve the following constrained optimization problem:</p>
+
+  <p class="eqns" style="width:20em;">
+    max&thinsp;<sub><i>f<sub>1</sub></i>,…,<i>f<sub>p</sub></i>,<span class="red"><i>λ</i></span></sub> (<span class="red"><i>λ</i></span>)<br />
+    <i>G</i> <i>f<sub>j</sub></i> = −&nbsp;<span class="red" style="white-space:nowrap;"><i>λ&thinsp;F<sub>dist&thinsp;<sub>j</sub></sub></i></span>&emsp;&emsp;∀&nbsp;<span style="white-space:nowrap;" class="red"><i>j</i> ∈ {1, …, <i>p</i>}</span><br />
+    (<i>f<sub>j</sub><sup>1</sup></i>, …, <i>f<sub>j</sub><sup>n</sup></i>) ∈ <i>C<sup>1</sup></i> × … × <i>C<sup>n</sup></i>&emsp;&emsp;∀&nbsp;<span style="white-space:nowrap;" class="red"><i>j</i> ∈ {1, …, <i>p</i>}</span><br />
+    <span class="red"><i>λ</i></span> ≥ 0
+  </p>
+
+  <p>Solving this problem provides us with <span class="red"><i>λ<sup>max</sup></i></span>, the measure of the maximal robustness that we were looking for, and contact forces <i>f<sub>1</sub><sup>sol</sup></i>, …, <i>f<sub>p</sub><sup>sol</sup></i> canceling each disturbance <span class="red"><span style="white-space:nowrap;"><i>λ<sup>max</sup>&thinsp;F<sub>dist&thinsp;<sub>1</sub></sub></i></span>, …, <span style="white-space:nowrap;"><i>λ<sup>max</sup>&thinsp;F<sub>dist&thinsp;<sub>p</sub></sub></i></span></span>, that is to say, opposing forces to each of these disturbances.</p>
+
+  <p>Up to this point, the method we have presented is not different from a method proposed in the early 2000s to measure the <em>quality</em> of the grasp. In grasp analysis, a <em>quality measure</em> is a quantitative index making the comparison of grasps possible: for instance, a grasp can be considered better than an other if its contact points are better distributed on the surface of the object, or if its grasp matrix has a larger condition number, or if its grasp wrench space is bigger. Numerous grasps quality measures have been proposed since the early 1990s, and the <span class="red"><i>λ<sup>max</sup></i></span> defined above as the scale factor between two particular polytopes is one of them.</p>
+
+  <p>The originality of the method we propose lies in looking for tightening forces rather than (or more precisely together with) opposing forces to each disturbance <span class="red"><span style="white-space:nowrap;"><i>λ<sup>max</sup>&thinsp;F<sub>dist&thinsp;<sub>1</sub></sub></i></span>, …, <span style="white-space:nowrap;"><i>λ<sup>max</sup>&thinsp;F<sub>dist&thinsp;<sub>p</sub></sub></i></span></span>. To do so, we look for the contact forces <i>f<sub>1</sub></i>, …, <i>f<sub>p</sub></i>, in the optimization problem above, as sums of tightening forces <span class="cyan"><i>f<sub>0</sub></i></span> and force variations 𝛿<i>f<sub>1</sub></i>, …, 𝛿<i>f<sub>p</sub></i>:</p>
+
+  <p class="eqns" style="width:6em;">
+    <i>f<sub>1</sub></i> = <span class="cyan"><i>f<sub>0</sub></i></span> + 𝛿<i>f<sub>1</sub></i><br />
+    ⋮<br />
+    <i>f<sub>p</sub></i> = <span class="cyan"><i>f<sub>0</sub></i></span> + 𝛿<i>f<sub>p</sub></i>
+  </p>
+
+  <p>Or, more explicitly:</p>
+
+  <p class="eqns" style="width:19em;">
+    (<i>f<sub>1</sub><sup>1</sup></i>, …, <i>f<sub>1</sub><sup>n</sup></i>) = <span class="cyan">(<i>f<sub>0</sub><sup>1</sup></i>, …, <i>f<sub>0</sub><sup>n</sup></i>)</span> + (𝛿<i>f<sub>1</sub><sup>1</sup></i>, …, 𝛿<i>f<sub>1</sub><sup>n</sup></i>)<br />
+    ⋮<br />
+    (<i>f<sub>p</sub><sup>1</sup></i>, …, <i>f<sub>p</sub><sup>n</sup></i>) = <span class="cyan">(<i>f<sub>0</sub><sup>1</sup></i>, …, <i>f<sub>0</sub><sup>n</sup></i>)</span> + (𝛿<i>f<sub>p</sub><sup>1</sup></i>, …, 𝛿<i>f<sub>p</sub><sup>n</sup></i>)
+  </p>
+
+  <p>The tightening forces <span class="cyan"><i>f<sub>0</sub></i></span> are the same for all disturbances, contrary to the opposing forces <i>f<sub>1</sub></i>, …, <i>f<sub>p</sub></i>. They are applied on the object in the absence of any disturbance. For each disturbance <span style="white-space:nowrap;"><i>j</i> ∈ {1, …, <i>p</i>}</span>, force variations 𝛿<i>f<sub>j</sub></i> turn the common tightening forces <span class="cyan"><i>f<sub>0</sub></i></span> into adequate opposing forces <i>f<sub>j</sub></i>.</p>
+
+  <p>The tightening forces must be, of course, in the bounded contact cones: <span class="cyan">(<i>f<sub>0</sub><sup>1</sup></i>, …, <i>f<sub>0</sub><sup>n</sup></i>)</span> ∈ <span style="white-space:nowrap;"><i>C<sup>1</sup></i> × … × <i>C<sup>n</sup></i></span>. Unlike the opposing forces, they don't have to equilibrate a disturbance, so their resultant is simply zero: <span style="white-space:nowrap;"><i>G</i> <span class="cyan"><i>f<sub>0</sub></i></span> = 0</span> (actually, they still have to counteract gravity and produce the desired motion of the object, but as we said before, we leave the weight of the object and its acceleration out of this presentation, for the sake of simplicity).</p>
+
+  <p>Following the decomposition of the contact forces into tightening forces and force variations, the constrained optimization problem formulated above becomes:</p>
+
+  <p class="eqns" style="width:27em;">
+    max&thinsp;<sub><span class="cyan"><i>f<sub>0</sub></i></span>,𝛿<i>f<sub>1</sub></i>,…,𝛿<i>f<sub>p</sub></i>,<span class="red"><i>λ</i></span></sub> (<span class="red"><i>λ</i></span>)<br />
+    <i>G</i> <span class="cyan"><i>f<sub>0</sub></i></span> = 0<br />
+    <span class="cyan">(<i>f<sub>0</sub><sup>1</sup></i>, …, <i>f<sub>0</sub><sup>n</sup></i>)</span> ∈ <i>C<sup>1</sup></i> × … × <i>C<sup>n</sup></i><br />
+    <i>G</i> (<span class="cyan"><i>f<sub>0</sub></i></span> + 𝛿<i>f<sub>j</sub></i>) = −&nbsp;<span class="red" style="white-space:nowrap;"><i>λ&thinsp;F<sub>dist&thinsp;<sub>j</sub></sub></i></span>&emsp;&emsp;∀&nbsp;<span style="white-space:nowrap;" class="red"><i>j</i> ∈ {1, …, <i>p</i>}</span><br />
+    <span class="cyan">(<i>f<sub>0</sub><sup>1</sup></i>, …, <i>f<sub>0</sub><sup>n</sup></i>)</span> + (𝛿<i>f<sub>j</sub><sup>1</sup></i>, …, 𝛿<i>f<sub>j</sub><sup>n</sup></i>) ∈ <i>C<sup>1</sup></i> × … × <i>C<sup>n</sup></i>&emsp;&emsp;∀&nbsp;<span style="white-space:nowrap;" class="red"><i>j</i> ∈ {1, …, <i>p</i>}</span><br />
+    <span class="red"><i>λ</i></span> ≥ 0
+  </p>
+
+  <p>Solving this problem provides us with the measure of the maximal robustness <span class="red"><i>λ<sup>max</sup></i></span>, tightening forces <span class="cyan"><i>f<sub>0</sub><sup>sol</sup></i></span>, and opposing forces <span style="white-space:nowrap;"><span class="cyan"><i>f<sub>0</sub><sup>sol</sup></i></span> + 𝛿<i>f<sub>1</sub><sup>sol</sup></i></span>, …, <span style="white-space:nowrap;"><span class="cyan"><i>f<sub>0</sub><sup>sol</sup></i></span> + 𝛿<i>f<sub>p</sub><sup>sol</sup></i></span> to the disturbances <span class="red"><span style="white-space:nowrap;"><i>λ<sup>max</sup>&thinsp;F<sub>dist&thinsp;<sub>1</sub></sub></i></span>, …, <span style="white-space:nowrap;"><i>λ<sup>max</sup>&thinsp;F<sub>dist&thinsp;<sub>p</sub></sub></i></span></span> (respectively).</p>
+
+  <p>Although it is possible to solve this constrained optimization problem directly, using generic gradient flow methods for instance, a few simplifications are possible that make it not only easier to solve, but also more meaningful physically. In particular, the inequality constraints relative to the bounded contact cones can be linearized, and the force variations between the tightening forces and the opposing forces can be pre-computed (as a function of the optimization variable <span class="red"><i>λ</i></span>) by assuming that they are minimal. This assumption is important because it makes the tightening forces a sort of middle value between the various opposing forces.</p>
+
+  <!-- Verbose version of the above paragraph:
+
+  <p>Although it is possible to solve this constrained optimization problem directly, using generic gradient flow methods for instance, a few preliminary simplifications are welcome. Indeed, the dimension of the unknown is relatively large, <span style="white-space:nowrap;">3&thinsp;<i>n</i>&thinsp;(1+<i>p</i>) + 1</span>, which means that the resolution algorithm has to explore a subset of <span style="white-space:nowrap;">ℝ<sup>3&thinsp;<i>n</i>&thinsp;(1+<i>p</i>) + 1</sup></span> (the one limited by the inequality constraints). For a grasp with <span style="white-space:nowrap;"><i>n</i> = 5</span> contacts and a disturbance polytope with <span style="white-space:nowrap;"><i>p</i> = 6</span> vertices, that's already a subset of ℝ<sup>106</sup>. Hence a good reason to try to simplify the problem.</p>
+
+  <ol>
+
+    <li>First and foremost, the inequality constraints relative to the bounded contact cones, which are the only non-linear constraints, can be easily linearized. Doing so turns the optimization problem into a linear programming problem&nbsp;(LP). Optimization problems of this class have efficient resolution algorithms.</li>
+
+    <li>The force variations can be assumed to be minimal, given that the tightening forces represent a sort of middle value between the various opposing forces. The following optimization problem describes such a minimal force variation 𝛿<i>f<sub>j</sub></i> between the tightening forces <span class="cyan"><i>f<sub>0</sub></i></span> and the opposing forces <span class="cyan"><i>f<sub>0</sub></i></span> + 𝛿<i>f<sub>j</sub></i> (for <span style="white-space:nowrap;"><i>j</i> ∈ {1, …, <i>p</i>}</span>):
+
+      <p class="eqns" style="width:11em;">
+        min&thinsp;<sub>𝛿<i>f<sub>j</sub></i></sub> ‖&thinsp;𝛿<i>f<sub>j</sub></i>&thinsp;‖<sup>2</sup><br />
+        <i>G</i> <span class="cyan"><i>f<sub>0</sub></i></span> = 0<br />
+        <i>G</i> (<span class="cyan"><i>f<sub>0</sub></i></span> + 𝛿<i>f<sub>j</sub></i>) = −&nbsp;<span class="red" style="white-space:nowrap;"><i>λ&thinsp;F<sub>dist&thinsp;<sub>j</sub></sub></i></span><br />
+      </p>
+
+    The norm of 𝛿<i>f<sub>j</sub></i> can actually be weighted by a (symmetric, positive-definite) matrix <i>Q</i>, which can be interpreted as describing the compliance of the fingers at the contact points. The optimization problem would then be:
+
+      <p class="eqns" style="width:9em;">
+        min&thinsp;<sub>𝛿<i>f<sub>j</sub></i></sub>&ensp;½ 𝛿<i>f<sub>j</sub><sup>T</sup></i> <i>Q</i> 𝛿<i>f<sub>j</sub></i><br />
+        <i>G</i> 𝛿<i>f<sub>j</sub></i> = −&nbsp;<span class="red" style="white-space:nowrap;"><i>λ&thinsp;F<sub>dist&thinsp;<sub>j</sub></sub></i></span><br />
+      </p>
+
+    This problem is a quadratic programming problem&nbsp;(QP) without inequality constraints: the analytical expression of its solution is readily available, i.e. we can derive 𝛿<i>f<sub>j</sub></i> as a function of <span class="red"><i>λ</i></span>, <span class="red" style="white-space:nowrap;"><i>F<sub>dist&thinsp;<sub>j</sub></sub></i></span>, <i>G</i> and <i>Q</i>. The force variations 𝛿<i>f<sub>1</sub></i>, …, 𝛿<i>f<sub>p</sub></i> found by this process have more physical meaning than those found by a direct resolution of the original, unsimplified constrained optimization problem (in other words, it is a physical solution rather than just a mathematical solution).</li>
+
+  </ol>
+
+  -->
+
+  <p>The optimization problem resulting from these simplifications is a linear programming problem&nbsp;(LP) whose unknowns are <span class="cyan"><i>f<sub>0</sub></i></span> and&nbsp;<span class="red"><i>λ</i></span>:</p>
+
+  <p class="eqns" style="width:6em;">
+    max&thinsp;<sub><i>x</i></sub>&ensp; <i>c<sup>T</sup> x</i><br />
+    <i>A<sub>eq</sub> x</i> = <i>b<sub>eq</sub></i><br />
+    <i>A<sub>neq</sub> x</i> ≤ <i>b<sub>neq</sub></i>
+  </p>
+
+  <div>
+    <table border="0" cellspacing="0" cellpadding="0" style="margin-left:auto;margin-right:auto;">
+      <colgroup>
+        <col /><col/><col /><col />
+        <col width="75" />
+        <col /><col/><col /><col />
+        <col width="75" />
+        <col />
+      </colgroup>
+      <tr>
+        <td>
+          <i>x</i>&nbsp;=&nbsp;
+        </td>
+        <td style="line-height:100%">
+          ⎛<br />
+          ⎜<br />
+          ⎝
+        </td>
+        <td style="text-align:center;">
+          <span class="cyan"><i>f<sub>0</sub></i></span><br />
+          <span class="red"><i>λ</i></span>
+        </td>
+        <td style="line-height:100%">
+          ⎞<br />
+          ⎟<br />
+          ⎠
+        </td>
+        <td></td>
+        <td>
+          <i>c</i>&nbsp;=&nbsp;
+        </td>
+        <td style="line-height:100%">
+          ⎛<br />
+          ⎜<br />
+          ⎝
+        </td>
+        <td style="text-align:center;">
+          <span class="cyan">0<sub><i>3n</i></sub></span><br />
+          <span class="red">1</span>
+        </td>
+        <td style="line-height:100%">
+          ⎞<br />
+          ⎟<br />
+          ⎠
+        </td>
+        <td></td>
+        <td>
+          <span class="red"><i>λ</i></span> = <i>c<sup>T</sup> x</i>
+        </td>
+      </tr>
+    </table>
+  </div>
+
+  <p>Solving this problem yields the measure of the maximal robustness <span class="red"><i>λ<sup>max</sup></i></span>, and tightening forces <span class="cyan"><i>f<sub>0</sub><sup>sol</sup></i></span> associated with this maximal robustness since they are separated from opposing forces to the disturbances <span class="red" style="white-space:nowrap;"><i>λ<sup>max</sup>&thinsp;F<sub>dist&thinsp;<sub>p</sub></sub></i></span> by minimal variations 𝛿<i>f<sub>j</sub><sup>sol</sup></i>.</p>
+
+  <p>However, sometimes, it may not be necessary or even desirable to hold the object with this tightening <span class="cyan"><i>f<sub>0</sub><sup>sol</sup></i></span> designed for maximal robustness. A lighter tightening of the object may be enough. To find it, we can consider a smaller scaling of the wrench disturbance polytope:</p>
+
+  <div class="figure" style="width:430px;">
+    <img width="240" height="133" src="adws-approx-step-3-240x133.png" title="How to describe a fraction of the maximal robustness of the grasp" alt="[Drawing of a scaled-by-lambda unit polytope in the set of admissible disturbances]" />
+    <div class="caption" style="text-align:justify;">The scaled-by-<span class="red"><i>λ</i></span> polytope, for <span style="white-space:nowrap;"><span class="red"><i>λ</i></span> ∈ [0, <span class="red"><i>λ<sup>max</sup></i></span>]</span>, describes a lesser robustness than the scaled-by-<span class="red"><i>λ<sup>max</sup></i></span> polytope. Its vertices are <span class="red"><span style="white-space:nowrap;"><i>λ&thinsp;F<sub>dist&thinsp;<sub>1</sub></sub></i></span>, …, <span style="white-space:nowrap;"><i>λ&thinsp;F<sub>dist&thinsp;<sub>p</sub></sub></i></span></span>. They are known and admissible.</div>
+  </div>
+
+  <p>The problem is now to find tightening forces and minimal force variations between them and the opposing forces to the disturbances <span class="red"><span style="white-space:nowrap;"><i>λ&thinsp;F<sub>dist&thinsp;<sub>1</sub></sub></i></span>, …, <span style="white-space:nowrap;"><i>λ&thinsp;F<sub>dist&thinsp;<sub>p</sub></sub></i></span></span>. It is similar to the problem we have solved for the maximal robustness, except that the focus isn't on <span class="red"><i>λ</i></span>, which isn't an unknown variable anymore, so a different cost function must be used. We can settle for the minimization of the tightening forces for instance. Eventually, the problem of finding tightening forces associated to the robustness <span class="red"><i>λ</i></span> can be formulated as a quadratic programming problem&nbsp;(QP):</p>
+
+  <p class="eqns" style="width:7em;">
+    min&thinsp;<sub><span class="cyan"><i>f<sub>0</sub></i></span></sub>&ensp;½ <span class="cyan"><i>f<sub>0</sub></i></span><i><sup>T</sup></i> <span class="cyan"><i>f<sub>0</sub></i></span><br />
+    <i>A</i>′<i><sub>eq</sub></i> <span class="cyan"><i>f<sub>0</sub></i></span> = <i>b</i>′<i><sub>eq</sub></i><br />
+    <i>A</i>′<i><sub>neq</sub></i> <span class="cyan"><i>f<sub>0</sub></i></span> ≤ <i>b</i>′<i><sub>neq</sub></i>
+  </p>
+
+  <p class="lastblock">The final step of the approach of grasp robustness that we have presented here is to integrate the computed tightening forces into our optimization-based control scheme of multifingered dextrous manipulation (see the <a href="control.html">section about control</a>), as desired values for the contact forces. This achieves robust manipulation.</p>
+
+</div>
+
+<!-- Copyright and Contact -->
+
+<div id="copyright">
+
+  <hr />
+
+  <p class="firstblock lastblock" style="text-align:left;">
+    <span style="white-space:nowrap;">Copyright ©&nbsp;2012 Romain Michalec.</span>
+    <span style="white-space:nowrap;">Text licensed under <a href="http://creativecommons.org/licenses/by-nc-nd/3.0">CC&nbsp;BY-NC-ND&nbsp;3.0</a> or ulterior.</span>
+    <span style="white-space:nowrap;">Images released into the <a href="http://creativecommons.org/publicdomain/zero/1.0">public&nbsp;domain</a>.</span><br />
+    <span style="white-space:nowrap;">Valid <a href="http://validator.w3.org/check?uri=referer">XHTML&nbsp;1.1</a> and <a href="http://jigsaw.w3.org/css-validator/check/referer?profile=css3">CSS&nbsp;3</a>.</span>
+    <span style="white-space:nowrap;">Last update: 2012-03-10.</span>
+    <span style="white-space:nowrap;">Contact: firstname.lastname@ensta.org.</span></p>
+
+</div>
+
+</body>
+</html>
